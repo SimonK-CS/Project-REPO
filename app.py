@@ -1,37 +1,39 @@
+# Import necessary libraries
 import streamlit as st
-from streamlit.logger import get_logger
+import gspread
+from google.oauth2.service_account import Credentials
+import pandas as pd
+import matplotlib.pyplot as plt
 
-LOGGER = get_logger(__name__)
+# Google API authentication
+key_file_path = "apikey2.json"  # JSON file with your API credentials
+scopes = ["https://www.googleapis.com/auth/spreadsheets.readonly"]  # Read-only scope
 
+credentials = Credentials.from_service_account_file(key_file_path, scopes=scopes)
+client = gspread.authorize(credentials)
 
-def run():
-    st.set_page_config(
-        page_title="Hello",
-        page_icon="👋",
-    )
+# Load Google Sheet and fetch data
+sheet = client.open("HR-Data").worksheet("HR-Data1")  # Open the specific Google Sheet and worksheet
+range_data = sheet.get("A1:AI1471")  # Fetch the specific range
 
-    st.write("# Welcome to Streamlit! 👋")
+# Convert the range data into a DataFrame
+df = pd.DataFrame(range_data[1:], columns=range_data[0])  # Use the first row as header and the rest as data
 
-    st.sidebar.success("Select a demo above.")
+# Streamlit app
+st.title("Google Sheets Data Visualization in Streamlit")
 
-    st.markdown(
-        """
-        Streamlit is an open-source app framework built specifically for
-        Machine Learning and Data Science projects.
-        **👈 Select a demo from the sidebar** to see some examples
-        of what Streamlit can do!
-        ### Want to learn more?
-        - Check out [streamlit.io](https://streamlit.io)
-        - Jump into our [documentation](https://docs.streamlit.io)
-        - Ask a question in our [community
-          forums](https://discuss.streamlit.io)
-        ### See more complex demos
-        - Use a neural net to [analyze the Udacity Self-driving Car Image
-          Dataset](https://github.com/streamlit/demo-self-driving)
-        - Explore a [New York City rideshare dataset](https://github.com/streamlit/demo-uber-nyc-pickups)
-    """
-    )
+# Display the dataset
+st.subheader("Dataset")
+st.write(df)
 
+# First visualization: Pie chart (Department Distribution)
+st.subheader("Percentage of Employees by Department")
+department_counts = df['Department'].value_counts()  # Count occurrences in the 'Department' column
+percentages = department_counts / department_counts.sum() * 100  # Calculate percentages
 
-if __name__ == "__main__":
-    run()
+# Create pie chart
+fig1, ax1 = plt.subplots(figsize=(10, 6))
+ax1.pie(percentages, labels=percentages.index, autopct='%1.1f%%', startangle=140)
+ax1.set_title('Percentage of Employees by Department')
+ax1.axis('equal')  # Ensures the pie chart is a circle
+st.pyplot(fig1)
