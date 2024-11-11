@@ -21,8 +21,8 @@ credentials = service_account.Credentials.from_service_account_info(
     SERVICE_ACCOUNT_INFO, scopes=SCOPES
 )
 
-SAMPLE_SPREADSHEET_ID = '19CC438qwcEpCufbyukbzQ1RmVW9uZ1VK6rFHtXNU8IU'
-SHEET_NAME = 'HR-Data'
+SAMPLE_SPREADSHEET_ID = '1MsASeu16jmeMzhvi50DXi6rxRz3FQ99ioGaAJC1ZjjE'
+SHEET_NAME = 'Test_Test'
 
 #########################################################################################
 # Step 1: Class that organizes employee attributes & converts employee data to list format
