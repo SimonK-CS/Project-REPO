@@ -2,7 +2,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 
 # Step 1: Load the service account JSON file
-SERVICE_ACCOUNT_FILE = 'service_account.json'  # Replace with your JSON file name
+SERVICE_ACCOUNT_FILE = 'apikey2.json'  # Replace with your JSON file name
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive"
@@ -14,7 +14,7 @@ credentials = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes
 client = gspread.authorize(credentials)
 
 # Step 3: Open the Google Sheet
-spreadsheet_name = "HR-Data-Personal"  # Replace with the name of your spreadsheet
+spreadsheet_name = "hr-data-personal"  # Replace with the name of your spreadsheet
 try:
     spreadsheet = client.open(spreadsheet_name)
     print(f"Successfully connected to the spreadsheet: {spreadsheet_name}")
